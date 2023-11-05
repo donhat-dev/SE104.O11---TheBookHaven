@@ -1,5 +1,7 @@
 <?php
 
+echo "api test";
+
 $curl = curl_init();
 
 curl_setopt_array($curl, array(

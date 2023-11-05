@@ -2,9 +2,9 @@
 
 <?php
 $servername = "localhost";
-$database = "ban_sach";
-$username = "root";
-$password = "";
+$database = "se104_g9";
+$username = "admin";
+$password = "password";
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $database);
 // Check connection

@@ -1,5 +1,6 @@
 <?php include 'header.php'; ?>
 <?php include 'config/connect.php' ?>
+<!-- a -->
 <!--<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
 	<div class="carousel-inner">
 		<div class="carousel-item active">

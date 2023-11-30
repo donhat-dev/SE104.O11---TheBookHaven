@@ -121,6 +121,8 @@ include 'header.php';
 					$re_phone = $_POST['cuss_phone'];
 					$re_address = $_POST['cuss_address'];
 					//$re_city = $_POST['cuss_city'];
+					$pe_method = $_POST['payment_method'];
+
 
 					if (empty($error)) {
 						//từ khúc này tới 142 không cần thiết vì tạo session customer từ login.php
@@ -357,6 +359,86 @@ include 'header.php';
 											<td><strong><span class="amount price"><?php echo $_SESSION['total_cart'] ?></span></strong>
 											</td>
 										</tr>
+										<?php 
+										//
+										
+										
+										?>
+
+
+										<tr class="order-total">
+											<th>Phương thức thanh toán</th>
+											<td>
+											 <select id="payment_method" style="width:200px; height:30px;" onchange="onchange_payment_method()">
+												<option value="cod" selected><strong><span class="amount price">COD</span></strong></option>
+												<option value="momo"><strong><span class="amount price">MOMO</span></strong></option>
+												<option value="zalopay"><strong><span class="amount price">ZALOPAY</span></strong></option>
+												<option value="vnpay"><strong><span class="amount price">VNPAY</span></strong></option>
+												<option value="viettelpay"><strong><span class="amount price">VIETTEL PAY</span></strong></option>
+												<option value="truemoney"><strong><span class="amount price">TrueMoney</span></strong></option>
+												<option value="smartpay"><strong><span class="amount price">SmartPay</span></strong></option>
+												<option value="mbbank"><strong><span class="amount price">MB Bank</span></strong></option>
+											</select>
+											</td>
+										</tr>
+										<tr class="waiting-request" style="display:none;">
+											<td colspan="2">
+											<div class="fa-3x">
+											<i class="fas fa-circle-notch fa-spin"></i>
+
+										</div>
+
+										</td>
+										</tr>
+										<tr class="order-total qr-row" style="display:none;">
+											<th><a id="src_url" target="_blank" href="#"><strong><span class="amount price">Quét mã hoặc nhấn vào đây</span></strong></a></th>
+											<td>
+												<img src="" onhover="this.style.opacity='0.5';" onmouseout="this.style.opacity='1';"
+												id="qr_code" style="width: 200px; height: 200px;"></img>
+												</div>
+											</td>
+										</tr>
+
+										<!--If momo option is selected, click submit button to run the momo api-->
+										<script type="text/javascript">
+											function onchange_payment_method() {
+												var payment_method = document.getElementById("payment_method").value;
+												var amount = <?php echo $_SESSION['total_cart'] ?>;
+												if (payment_method != "cod") {
+													$('.order-button-payment').hide();
+													$('.waiting-request').show();
+													$.ajax({
+														url: 'onepay-request.php',
+														type: 'POST',
+														dataType: 'html',
+														data: {
+															amount: amount,
+															app_id: payment_method
+														}
+													}).done(function(data) {
+														let d = JSON.parse(data);
+														console.log(d);
+														if (d.status == 'success') {
+															$('#qr_code').attr('src', d.src);
+															$('#src_url').attr('href', d.qr_url.includes('http') ? d.qr_url : '#');
+															$('.qr-row').show();
+															$('.waiting-request').hide();
+
+															var payment_id = d.payment_id;
+															
+														} else {
+															window.alert(d.error);
+														}
+													});
+
+												} 
+												else {
+													$('.qr-row').hide();
+													$('.order-button-payment').show();
+												}
+											}
+										</script>
+
 									</tfoot>
 								</table>
 							</div>

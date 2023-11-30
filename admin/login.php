@@ -49,6 +49,7 @@ if (!empty($_POST)) {
     }
     //cái này để connect dtb và đăng nhập
     if (empty($error)) {
+        $u_pass = hash('sha256', $u_pass);
         $result = execute("SELECT * FROM account WHERE (email = '$u_name' or phone = '$u_name') and password = '$u_pass' and type>0")->fetch_assoc();
         if ($result) {
             $_SESSION['admin'] = $result;

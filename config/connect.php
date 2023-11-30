@@ -1,7 +1,7 @@
 
 
 <?php
-$envFile = dirname(__FILE__, 2). '/.env';
+$envFile = dirname(__FILE__, 3). '/.env';
 
 $env = parse_ini_file($envFile);
 if (file_exists($envFile)) {
@@ -10,8 +10,13 @@ if (file_exists($envFile)) {
     $username = $env['DB_USERNAME'];
     $password = $env['DB_PASSWORD'];
 } else {
-    die("Connection failed: No .env file found");
+    // die("Connection failed: No .env file found");
 }
+
+$servername = 'localhost';
+$database = 'se104';
+$username = 'root';
+$password = '';
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $database);

@@ -86,9 +86,10 @@ include('header.php');
 
     <div class="table-responsive">
       <?php
-        $connection = mysqli_connect("localhost:3306", "root", "", "ban_sach");
-        $query="select * from account";
-        $query_run = mysqli_query($connection, $query);
+        $query_run = $conn->query("SELECT * FROM account WHERE type>0
+        AND id != ".$_SESSION['admin']['id'] );
+        $query_run = $query_run->fetch_all(MYSQLI_ASSOC);
+
       ?>
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>
@@ -103,9 +104,9 @@ include('header.php');
         </thead>
         <tbody>
         <?php 
-          if(mysqli_num_rows($query_run) > 0)
+          if($query_run)
           {
-            while($row=mysqli_fetch_assoc($query_run)){
+            foreach($query_run as $r => $row){
               ?>
               <tr>
                 <td><?php echo $row['id'];?></td>

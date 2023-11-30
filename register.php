@@ -1,5 +1,7 @@
 <?php
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
 ?>
 
 <!DOCTYPE html>
@@ -290,7 +292,7 @@ session_start();
 
 
         if (empty(trim($_POST["password"]))) {
-            $password_err = "Please enter a password.";
+            $password_err = "Vui lòng nhập mật khẩu.";
         } elseif (strlen(trim($_POST["password"])) < 6) {
             $password_err = "Password must have atleast 6 characters.";
         } else {
@@ -323,6 +325,7 @@ session_start();
 
 
         if (empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
+            $password = hash('sha256', $password);
 
             // Prepare an insert statement
             $sql = "INSERT into account (name, email, phone, password, address, type) VALUES ('$name', '$email','$phone', '$password', '$address', 0)";
@@ -334,6 +337,27 @@ session_start();
                 echo $conn->error;
             }
         }
+        else{
+            $message = " ";
+            if (!empty($email_err)) {
+                $message .= $email_err."<br>";
+            }
+            elseif (!empty($password_err)) {
+                $message .= $password_err."<br>";
+            }
+            elseif (!empty($confirm_password_err)) {
+                $message .= $confirm_password_err."<br>";
+            }
+            elseif (!empty($phone_err)) {
+                $message .= $phone_err."<br>";
+            }
+            elseif (!empty($name_err)) {
+                $message .= $name_err."<br>";
+            }
+            echo "<div class='form'><h3>Đăng ký thất bại!</h3><br/>".$message."<p>Vui lòng 
+            <a href='register.php'><strong>thử lại</strong></a>!</p></div>";
+        }
+
     } else {
     ?>
 

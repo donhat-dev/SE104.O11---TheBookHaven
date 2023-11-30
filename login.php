@@ -243,6 +243,7 @@
         $username = mysqli_real_escape_string($conn, $username); // php chuyển xuống cho mysql xử lí
         $password = stripslashes($_REQUEST['password']);
         $password = mysqli_real_escape_string($conn, $password);
+        $password = hash('sha256', $password);
         $query = "SELECT * FROM `account` WHERE (phone='$username' or email='$username') and password='$password'";
         $result = mysqli_query($conn, $query); //or die(mysql_error());
         $rows = mysqli_num_rows($result);

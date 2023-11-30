@@ -16,6 +16,7 @@ if (isset($_POST['registerbtn'])) {
         header('Location: register.php');
     } else {
         if ($password === $cpassword) {
+            $password = hash('sha256', $password);
             $query = "INSERT INTO account (name,email,password, type) VALUES ('$username','$email','$password', 1)";
             $query_run = execute($query);
 

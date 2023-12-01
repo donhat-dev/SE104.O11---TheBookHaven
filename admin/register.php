@@ -86,7 +86,7 @@ include('header.php');
 
     <div class="table-responsive">
       <?php
-        $query_run = $conn->query("SELECT * FROM account WHERE type>0
+        $query_run = $conn->query("SELECT * FROM account WHERE type=1
         AND id != ".$_SESSION['admin']['id'] );
         $query_run = $query_run->fetch_all(MYSQLI_ASSOC);
 

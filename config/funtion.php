@@ -155,3 +155,41 @@ function add_to_cart()
     $product_id = $_POST['product_id'];
     $quantity = $_POST['quantity'];
 }
+
+//hàm để kiểm tra thông tin đăng nhập, được gọi thông qua api
+function authenticate($username, $password)
+{
+    global $conn;
+    $hash_password = hash('sha256', $password);
+    //avoid sql injection
+    $username = addslashes($username);
+    $password = addslashes($password);
+    $stmt = $conn->prepare("SELECT * FROM account WHERE email = ? AND password = ?");
+
+    if ($conn->error) {
+        echo $conn->error;
+    }
+    $stmt->bind_param("ss", $username, $hash_password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    if ($user) {
+        return $user;
+    } else {
+        return false;
+    }
+}
+
+function get_param_by_key($key)
+{
+    if (!isset($_GET[$key]) && !isset($_POST[$key])) {
+        return false;
+    }
+    elseif (isset($_GET[$key])) {
+        return $_GET[$key];
+    }
+    elseif (isset($_POST[$key])) {
+        return $_POST[$key];
+    }
+}

@@ -38,6 +38,12 @@ if (isset($_POST['updatebtn'])) {
 	// $result =mysqli_query($conn, $update_query);
 	// $conn->query($update_query)
 	if (execute($update_query)) {
+		$_SESSION['customer']['name'] = $name;
+		$_SESSION['customer']['email'] = $email;
+		$_SESSION['customer']['phone'] = $phone;
+		$_SESSION['customer']['birthday'] = $birthday;
+		$_SESSION['customer']['address'] = $address;
+
 		echo "<script>
         	alert('Cập nhật tài khoản thành công');
         	window.location.href = 'category.php'
@@ -81,13 +87,13 @@ if (isset($_POST['updatebtn'])) {
 								<label>Email Address <span class="required">*</span></label>
 								<input type="email" placeholder="" name="cus_email" value="<?php echo $_SESSION['customer']['email'] ?>" required>
 							</div>
-							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<div class="checkout-form-list">
 									<label>Địa chỉ <span class="required">*</span></label>
 									<input type="text" placeholder="" name="cus_address" value="<?php echo $_SESSION['customer']['address'] ?>" required>
 								</div>
 							</div>
-						</div>
 						<div class="order-button-payment">
 							<input type="submit" name="updatebtn" value="Cập nhật thông tin">
 						</div>

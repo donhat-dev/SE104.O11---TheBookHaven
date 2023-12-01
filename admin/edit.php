@@ -34,11 +34,15 @@ if (isset($_GET['name'])) {
 	}
 
 	if (!empty($_FILES['anh_bia']['name'])) {
-		$image = time() . '-' . $_FILES['anh_bia']['name'];
+		$image = time() . '-' . basename($_FILES['anh_bia']['name']);
 		if ($image != $product['anh_bia']) {
 			unlink('public/image/product/' . $product['anh_bia']);
 		}
-		move_uploaded_file($_FILES['anh_bia']['tmp_name'], 'public/image/product/' . $image);
+
+
+		move_uploaded_file($_FILES['anh_bia']['tmp_name'], 'public/img/product/' . $image);
+
+
 		if (file_exists('public/image/product/' . $image)) {
 			// *** 1) Initialize / load image
 			$resizeObj = new resize('public/image/product/' . $image);
@@ -125,10 +129,6 @@ if (isset($_GET['name'])) {
 	<!-- Begin Page Content -->
 	<div class="container-fluid">
 		<!-- Page Heading -->
-		<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
-			<a target="_blank" href="https://datatables.net/">official DataTables documentation</a>.
-		</p>
-
 		<!-- DataTales Example -->
 		<div class="card shadow mb-4">
 			<div class="card-header py-3">
@@ -319,9 +319,7 @@ if (isset($_GET['name'])) {
 	<!-- Begin Page Content -->
 	<div class="container-fluid">
 		<!-- Page Heading -->
-		<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
-			<a target="_blank" href="https://datatables.net/">official DataTables documentation</a>.
-		</p>
+		
 
 		<!-- DataTales Example -->
 		<div class="card shadow mb-4">
@@ -432,9 +430,7 @@ if (isset($_GET['name'])) {
 	<!-- Begin Page Content -->
 	<div class="container-fluid">
 		<!-- Page Heading -->
-		<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
-			<a target="_blank" href="https://datatables.net/">official DataTables documentation</a>.
-		</p>
+		
 
 		<!-- DataTales Example -->
 		<div class="card shadow mb-4">
@@ -527,9 +523,7 @@ if (isset($_GET['name'])) {
 	<!-- Begin Page Content -->
 	<div class="container-fluid">
 		<!-- Page Heading -->
-		<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
-			<a target="_blank" href="https://datatables.net/">official DataTables documentation</a>.
-		</p>
+		
 
 		<!-- DataTales Example -->
 		<div class="card shadow mb-4">
@@ -658,9 +652,7 @@ if (isset($_GET['name'])) {
 	<!-- Begin Page Content -->
 	<div class="container-fluid">
 		<!-- Page Heading -->
-		<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
-			<a target="_blank" href="https://datatables.net/">official DataTables documentation</a>.
-		</p>
+		
 
 		<!-- DataTales Example -->
 		<div class="card shadow mb-4">
@@ -769,9 +761,7 @@ if (isset($_GET['name'])) {
 	<!-- Begin Page Content -->
 	<div class="container-fluid">
 		<!-- Page Heading -->
-		<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
-			<a target="_blank" href="https://datatables.net/">official DataTables documentation</a>.
-		</p>
+		
 
 		<!-- DataTales Example -->
 		<div class="card shadow mb-4">

@@ -324,7 +324,7 @@ ini_set('display_errors', 'On');
         }
 
 
-        if (empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
+        if (empty($email_err) && empty($password_err) && empty($confirm_password_err) ) {
             $password = hash('sha256', $password);
 
             // Prepare an insert statement

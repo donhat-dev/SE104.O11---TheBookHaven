@@ -123,6 +123,8 @@ include 'header.php';
 					//$re_city = $_POST['cuss_city'];
 					$pe_method = $_POST['payment_method'];
 
+					$payment_id = !empty($_POST['payment_id']) ? $_POST['payment_id'] : NULL;
+
 
 					if (empty($error)) {
 						//từ khúc này tới 142 không cần thiết vì tạo session customer từ login.php
@@ -161,8 +163,12 @@ include 'header.php';
 						} else {
 							$baddress = $address;
 						}
-						$result = execute("INSERT INTO orders (acc_id, name, phone, address, status)
-											VALUES ($cus_id, '$bname', '$bphone', '$baddress','0')");
+						
+						$order_state = $payment_id ? 1 : 0;
+
+						$result = execute("INSERT INTO orders (acc_id, name, phone, address, status, payment_id)
+											VALUES ($cus_id, '$bname', '$bphone', '$baddress','$order_state', '$payment_id'
+											)");
 						if ($result == 1) {
 							// Thêm giỏ hàng vảo order detail
 							$order_id = $conn->insert_id;
@@ -172,6 +178,18 @@ include 'header.php';
 								$pro_price = $value['price'];
 								execute("INSERT INTO orders_detail (orders_id, prod_id, quantity, price) VALUES ($order_id, $pro_id, $pro_quantity, $pro_price)");
 							}
+
+							//update thong tin khach hang
+
+							$sql = "UPDATE account SET name = '$name', email = '$email', phone = '$phone', address = '$address', birthday = '$birthday' WHERE id = $cus_id";
+							execute($sql);
+
+							$_SESSION['customer']['name'] = $name;
+							$_SESSION['customer']['email'] = $email;
+							$_SESSION['customer']['phone'] = $phone;
+							$_SESSION['customer']['birthday'] = $birthday;
+							$_SESSION['customer']['address'] = $address;
+
 							// Gửi mail
 							// require "config/mail_checkout.php";
 							// $title = "Đặt hàng thành công";
@@ -408,7 +426,7 @@ include 'header.php';
 													$('.order-button-payment').hide();
 													$('.waiting-request').show();
 													$.ajax({
-														url: 'onepay-request.php',
+														url: 'onepay_request.php',
 														type: 'POST',
 														dataType: 'html',
 														data: {
@@ -423,8 +441,28 @@ include 'header.php';
 															$('#src_url').attr('href', d.qr_url.includes('http') ? d.qr_url : '#');
 															$('.qr-row').show();
 															$('.waiting-request').hide();
-
 															var payment_id = d.payment_id;
+															var interval = setInterval(function() {
+																$.ajax({
+																	url: 'onepay_transaction.php',
+																	type: 'POST',
+																	dataType: 'html',
+																	data: {
+																		payment_id: payment_id
+																	}
+																}).done(function(data) {
+																	let d = JSON.parse(data);
+																	console.log(d);
+																	if (d.status == 'success') {
+																		clearInterval(interval);
+																		$('.qr-row').hide();
+																		$('.order-button-payment').show();
+																		$('#payment_method').attr('disabled',1);
+																		$('#order').append('<input type="hidden" name="payment_id" value="'+payment_id+'">');
+																	}
+																});
+															}, 5000);
+
 															
 														} else {
 															window.alert(d.error);

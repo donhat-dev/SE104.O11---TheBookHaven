@@ -12,6 +12,8 @@ if (isset($_GET['id'])) {
 	WHERE p.id =  $id";
 	$product = execute($sql)->fetch_assoc();
 
+	$author_name = execute("SELECT * FROM tacgia WHERE id = " . $product['tacgia_id'])->fetch_assoc()['name'];
+
 	if ($product["anh_phu"] != "") {
 		$anhphu = json_decode($product['anh_phu']);
 	} else {
@@ -145,6 +147,7 @@ if (isset($_GET['id'])) {
 								</div>
 								<div class="product-info-stock-sku">
 									<p>Danh mục: <?php echo $product["cate_name"] ?></p>
+									<p>Tác Giả: <?php echo $author_name ?></p>
 									<p>Số lượng: <?php echo $product["quantity"] ?></p>
 									<p>Lượt xem: <span class="view"><?php echo $product["view"] ?></span></p>
 								</div>

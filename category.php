@@ -36,10 +36,34 @@ if (isset($_GET['cate_id'])) {
 
 	$sql = "SELECT * FROM product p
 			WHERE p.tacgia_id = $author_id";
-} else {
-	$sql = "SELECT p.*,c.name AS 'cate_name', p.tacgia_id, p.nxb_id
-			FROM product p, category c
-			WHERE p.cate_id = c.id and p.name like '%$search%' ORDER BY id desc";
+}
+//  elseif (isset($_GET['search_type']) && $_GET['search_type'] == 2 || isset($_GET['search_type']) && $_GET['search_type'] == 3){
+// 	$search_type = $_GET['search_type'];
+// 	if ($search_type == 2){
+// 		$sql = "SELECT p.*,c.name AS 'cate_name', p.tacgia_id, p.nxb_id
+// 			FROM product p, category c
+// 			WHERE p.tacgia_id IN (SELECT id FROM tacgia WHERE name like '%$search%')
+// 			GROUP BY p.id
+// 			ORDER BY id desc";
+// 	}
+// 	else{
+// 		$sql = "SELECT p.*,c.name AS 'cate_name', p.tacgia_id, p.nxb_id
+// 		FROM product p, category c
+// 		WHERE p.cate_id IN (SELECT id FROM category WHERE name like '%$search%')
+// 		GROUP BY p.id
+// 		ORDER BY id desc
+// 		";
+// 	}
+// }
+else
+{
+	$sql = "SELECT p.*,c.name AS 'cate_name', p.tacgia_id, p.nxb_id, t.name AS 'tacgia_name'
+			FROM product p, category c, tacgia t
+			WHERE p.cate_id = c.id and p.name like '%$search%' 
+			OR p.tacgia_id IN (SELECT id FROM tacgia WHERE name like '%$search%')
+			OR p.cate_id IN (SELECT id FROM category WHERE name like '%$search%')
+			GROUP BY p.id
+			ORDER BY id desc";
 }
 
 
@@ -280,7 +304,9 @@ $product = pagination($sql, $from, $sotinmottrang);
 											</div>
 											<div class="product-details text-center">
 
-												<h4><a href="product-detail.php?id=<?php echo $value['id']; ?>"><?php echo $value['name'] ?></a></h4>
+												<h4><a href="product-detail.php?id=<?php echo $value['id']; ?>"><?php echo $value['name'] ?>
+											
+											</a></h4>
 												<div class="product-price">
 													<ul>
 														<li class="price"><?php if ($value['sale_price'] > 0) {
@@ -367,7 +393,7 @@ $product = pagination($sql, $from, $sotinmottrang);
 				<?php
 				if (isset($_GET['cate_sort_name'])) {
 					$sql = "SELECT * FROM product p
-				WHERE p.name like '%$search%'
+				WHERE p.name like '%$search%' 
 				ORDER BY name ASC";
 				} else
 				if (isset($_GET['cate_sort_price'])) {
